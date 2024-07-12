@@ -1,0 +1,90 @@
+cd Dj_File_1
+
+python manage.py shell
+
+from my_app import * 
+
+
+Myuser1 = User.objects.create_user(username='First')          
+Myuser2 = User.objects.create_user(username='Second')
+
+
+Author.objects.create(author_to_User = Myuser1)
+Author.objects.create(author_to_User = Myuser2)
+
+
+Category.objects.create(Name_category = 'Sport')
+Category.objects.create(Name_category = 'Wild Life')
+Category.objects.create(Name_category = 'Travel')
+Category.objects.create(Name_category = 'Business')
+
+
+author1 = Author.objects.get(id=1)
+author2 = Author.objects.get(id=2)
+
+
+Post.objects.create(title='Top 10 countries to travel', text_article='Europe in the lead. Six of the top 10 countries on the list are in Europe, with Spain the highest overall. The report calls the continent', topic_choice='AR', post_to_author=author1)
+
+Post.objects.create(title='Economic', text_article="Our ranking excludes some tiny overseas territories, such as Bermuda. It also excludes Ireland, where gdp calculations are a bit odd. Other factors also affect our ranking: we only provide average gdp per person, for example", topic_choice="NW", post_to_author=author2)
+
+Post.objects.create(title="sometitle", text_article="sometext", topic_choice="AR", post_to_author=author2)
+
+
+Post.objects.get(id=1).post_to_category.add(Category.objects.get(id=1))
+Post.objects.get(id=1).post_to_category.add(Category.objects.get(id=2))
+
+Post.objects.get(id=2).post_to_category.add(Category.objects.get(id=2))
+Post.objects.get(id=2).post_to_category.add(Category.objects.get(id=3))
+
+Post.objects.get(id=3).post_to_category.add(Category.objects.get(id=3))
+Post.objects.get(id=3).post_to_category.add(Category.objects.get(id=4))
+
+
+Comment.objects.create(text_comment="my first comment", comment_to_post=Post.objects.get(id=1), comment_to_user=Author.objects.get(id=1).author_to_User)
+
+Comment.objects.create(text_comment="my 2 comment", comment_to_post=Post.objects.get(id=2), comment_to_user=Author.objects.get(id=2).author_to_User)
+
+Comment.objects.create(text_comment="my 3 comment", comment_to_post=Post.objects.get(id=2), comment_to_user=Author.objects.get(id=2).author_to_User) 
+
+Comment.objects.create(text_comment="my 4 comment", comment_to_post=Post.objects.get(id=3), comment_to_user=Author.objects.get(id=2).author_to_User) 
+
+
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).rating_comment
+Comment.objects.get(id=2).like() 
+Comment.objects.get(id=3).like() 
+Comment.objects.get(id=4).like()
+
+
+Post.objects.get(id=1).like()           
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).dislike() 
+Post.objects.get(id=2).dislike()
+Post.objects.get(id=3).dislike() 
+Post.objects.get(id=3).like()  
+
+a =  Author.objects.get(id=1)
+a.update_rating()
+
+b =  Author.objects.get(id=2)
+b.update_rating() 
+
+
+a = Author.objects.order_by("-rating_auth")
+a.rating_auth                               
+for i in a :
+	i.rating_auth
+	i.author_to_User.username
+
+
+c = Post.objects.order_by("rating_post")[0]
+c.time_in, c.time_out, c.title, c.text_article, c.post_to_author, c.preview()
+
+
+d = Comment.objects.all().filter(comment_to_post=Post.objects.order_by("rating_post")[0])
+ for i in d:   
+        i.time_com_in
+        i.rating_comment
+        i.text_comment
+        i.comment_to_user
